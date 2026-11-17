@@ -120,8 +120,15 @@ class FiltreoConfigFlow(ConfigFlow, domain=DOMAIN):
             if dati is not None:
                 self._auto = {CONF_HOST: host, CONF_PORT: p2, CONF_TOKEN: coll["token"], "dati": dati}
                 return await self.async_step_conferma()
-        self._trovato = {CONF_HOST: host, CONF_PORT: porta, "nome": str(prop.get("nome") or "Filtreo")}
-        self.context["title_placeholders"] = {"name": self._trovato["nome"]}
+        try:   # 1.1.1: solo una Filtreo che risponde davvero da qui (niente copie di prova su reti interne)
+            async with asyncio.timeout(4):
+                async with async_get_clientsession(self.hass).get(f"http://{host}:{porta}/ha/v1/salute") as r:
+                    if r.status != 200 or not (await r.json(content_type=None)).get("filtreo"):
+                        return self.async_abort(reason="cannot_connect")
+        except Exception:  # noqa: BLE001
+            return self.async_abort(reason="cannot_connect")
+        self._trovato = {CONF_HOST: host, CONF_PORT: porta, "nome": "Filtreo"}
+        self.context["title_placeholders"] = {"name": "Filtreo"}
         return await self.async_step_trovato()
 
     async def async_step_trovato(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
