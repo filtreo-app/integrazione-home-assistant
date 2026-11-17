@@ -15,7 +15,7 @@ from .api import FiltreoApi, FiltreoErrore
 from .const import ATTR_MINUTI, CONF_TOKEN, DOMAIN, SERVIZIO_PAUSA
 from .coordinator import FiltreoCoordinator
 
-PLATFORMS = [Platform.SWITCH, Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SELECT]
+PLATFORMS = [Platform.SWITCH, Platform.SENSOR, Platform.BINARY_SENSOR]   # 1.2.0: i profili si leggono (sensor), si scelgono nelle app
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 type FiltreoConfigEntry = ConfigEntry[FiltreoCoordinator]
@@ -45,6 +45,12 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: FiltreoConfigEntry) -> bool:
     api = FiltreoApi(async_get_clientsession(hass), entry.data[CONF_HOST], entry.data[CONF_PORT], entry.data[CONF_TOKEN])
+    # 1.2.0: i vecchi menu «Livello …» (select) spariscono da soli; il profilo si legge dai sensori «Profilo …»
+    from homeassistant.helpers import entity_registry as er
+    reg = er.async_get(hass)
+    for voce in er.async_entries_for_config_entry(reg, entry.entry_id):
+        if voce.domain == "select":
+            reg.async_remove(voce.entity_id)
     coordinator = FiltreoCoordinator(hass, entry, api)
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator

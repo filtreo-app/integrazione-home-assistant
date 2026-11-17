@@ -5,7 +5,7 @@ from typing import Any
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.const import PERCENTAGE
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .entity import FiltreoEntity
@@ -19,6 +19,21 @@ async def async_setup_entry(hass: HomeAssistant, entry, async_add_entities: AddC
         FiltreoNumero(c, "percentuale", "Percentuale", "percento", "mdi:percent", PERCENTAGE),
         FiltreoDispositivi(c),
     ])
+    # 1.2.0: «Profilo <dispositivo>», solo da leggere (si scelgono e si personalizzano nelle app Filtreo)
+    noti: set[str] = set()
+
+    @callback
+    def _nuovi() -> None:
+        nuove = []
+        for d in c.data.get("dispositivi") or []:
+            if d["id"] not in noti:
+                noti.add(d["id"])
+                nuove.append(FiltreoProfilo(c, d["id"], d["nome"]))
+        if nuove:
+            async_add_entities(nuove)
+
+    _nuovi()
+    entry.async_on_unload(c.async_add_listener(_nuovi))
 
 
 class FiltreoNumero(FiltreoEntity, SensorEntity):
@@ -51,3 +66,31 @@ class FiltreoDispositivi(FiltreoEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         return {"elenco": {d["nome"]: d.get("modo") or "" for d in self.coordinator.data.get("dispositivi") or []}}
+
+
+class FiltreoProfilo(FiltreoEntity, SensorEntity):
+    """il profilo che usa un dispositivo, con lo stesso nome delle app («Personale», «Standard · personalizzato»)"""
+    _attr_icon = "mdi:shield-account-outline"
+
+    def __init__(self, coordinator, did: str, nome: str) -> None:
+        super().__init__(coordinator, f"profilo_{did}")
+        self._did = did
+        self._attr_name = f"Profilo {nome}"
+
+    def _profilo(self) -> dict | None:
+        d = next((x for x in self.coordinator.data.get("dispositivi") or [] if x["id"] == self._did), None)
+        return next((m for m in self.coordinator.data.get("modalita") or [] if d and m["id"] == d.get("modo")), None)
+
+    @property
+    def available(self) -> bool:
+        return super().available and any(d["id"] == self._did for d in self.coordinator.data.get("dispositivi") or [])
+
+    @property
+    def native_value(self) -> str | None:
+        m = self._profilo()
+        return m["nome"] if m else None
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        m = self._profilo() or {}
+        return {"dettaglio": m.get("sotto") or ""}
