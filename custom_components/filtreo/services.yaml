@@ -1,0 +1,12 @@
+pausa:
+  fields:
+    minuti:
+      required: true
+      example: 30
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 480
+          unit_of_measurement: min
+          mode: box

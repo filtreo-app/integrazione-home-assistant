@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configura Filtreo",
+        "description": "Inserisci indirizzo, porta e chiave di Filtreo. Sono indicati nel pannello: Impostazioni › «Home Assistant e HomeKit».",
+        "data": {
+          "host": "Indirizzo",
+          "port": "Porta",
+          "token": "Chiave"
+        }
+      },
+      "conferma": {
+        "title": "Filtreo rilevato",
+        "description": "Filtreo rilevato su {host}. Premi Invia per configurarlo."
+      },
+      "reauth_confirm": {
+        "title": "Chiave di Filtreo modificata",
+        "description": "Incolla la nuova chiave, indicata nel pannello: Impostazioni › «Home Assistant e HomeKit».",
+        "data": {
+          "token": "Chiave"
+        }
+      },
+      "trovato": {
+        "title": "Filtreo trovato nella rete",
+        "description": "Filtreo è stato trovato su {host}. Premi Invia: in Filtreo comparirà una richiesta da consentire."
+      }
+    },
+    "error": {
+      "cannot_connect": "Filtreo non risponde a questo indirizzo e porta. Controlla che sia acceso e che l'indirizzo sia giusto.",
+      "invalid_auth": "La chiave non è giusta.",
+      "unknown": "Qualcosa è andato storto."
+    },
+    "abort": {
+      "already_configured": "Questo Filtreo è già collegato.",
+      "reauth_successful": "Chiave aggiornata.",
+      "cannot_connect": "Filtreo non risponde. Controlla che l’app FiltreoCasa sia avviata.",
+      "rifiutato": "Il collegamento è stato rifiutato in Filtreo.",
+      "scaduto": "Nessuna risposta in 10 minuti. Riprova da Impostazioni › Dispositivi e servizi."
+    },
+    "progress": {
+      "consenso": "Apri il pannello di Filtreo (nella barra laterale di Home Assistant o dal browser) e premi **Consenti** nel riquadro «chiede di collegarsi a Filtreo». Hai 10 minuti."
+    },
+    "flow_title": "{name}"
+  },
+  "services": {
+    "pausa": {
+      "name": "Metti in pausa Filtreo",
+      "description": "Mette in pausa il filtro per i minuti indicati. La ripresa è automatica.",
+      "fields": {
+        "minuti": {
+          "name": "Minuti",
+          "description": "Durata della pausa in minuti (da 1 a 480)."
+        }
+      }
+    }
+  }
+}

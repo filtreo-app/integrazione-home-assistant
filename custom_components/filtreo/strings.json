@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configura Filtreo",
+        "description": "Inserisci indirizzo, porta e chiave di Filtreo. Sono indicati nel pannello: Impostazioni › «Home Assistant e HomeKit».",
+        "data": {
+          "host": "Indirizzo",
+          "port": "Porta",
+          "token": "Chiave"
+        }
+      },
+      "conferma": {
+        "title": "Filtreo rilevato",
+        "description": "Filtreo rilevato su {host}. Premi Invia per configurarlo."
+      },
+      "reauth_confirm": {
+        "title": "Chiave di Filtreo modificata",
+        "description": "Incolla la nuova chiave, indicata nel pannello: Impostazioni › «Home Assistant e HomeKit».",
+        "data": {
+          "token": "Chiave"
+        }
+      },
+      "trovato": {
+        "title": "Filtreo found on your network",
+        "description": "Filtreo was found at {host}. Press Submit: a request to allow will appear in Filtreo."
+      }
+    },
+    "error": {
+      "cannot_connect": "Filtreo non risponde a questo indirizzo e porta. Controlla che sia acceso e che l'indirizzo sia giusto.",
+      "invalid_auth": "La chiave non è giusta.",
+      "unknown": "Qualcosa è andato storto."
+    },
+    "abort": {
+      "already_configured": "Questo Filtreo è già collegato.",
+      "reauth_successful": "Chiave aggiornata.",
+      "cannot_connect": "Filtreo is not responding. Make sure the FiltreoCasa app is running.",
+      "rifiutato": "The connection was refused in Filtreo.",
+      "scaduto": "No answer within 10 minutes. Try again from Settings › Devices & services."
+    },
+    "progress": {
+      "consenso": "Open the Filtreo panel (in the Home Assistant sidebar or in a browser) and press **Allow** on the \"wants to connect to Filtreo\" box. You have 10 minutes."
+    },
+    "flow_title": "{name}"
+  },
+  "services": {
+    "pausa": {
+      "name": "Metti in pausa Filtreo",
+      "description": "Mette in pausa il filtro per i minuti indicati. La ripresa è automatica.",
+      "fields": {
+        "minuti": {
+          "name": "Minuti",
+          "description": "Durata della pausa in minuti (da 1 a 480)."
+        }
+      }
+    }
+  }
+}

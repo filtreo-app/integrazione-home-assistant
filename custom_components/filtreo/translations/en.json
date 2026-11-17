@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Filtreo",
+        "description": "Enter the address, port and key of Filtreo. They are shown in the Filtreo panel: Settings › \"Home Assistant and HomeKit\".",
+        "data": {
+          "host": "Address",
+          "port": "Port",
+          "token": "Key"
+        }
+      },
+      "conferma": {
+        "title": "Filtreo found",
+        "description": "Filtreo found at {host}. Press Submit to set it up."
+      },
+      "reauth_confirm": {
+        "title": "Filtreo key changed",
+        "description": "Paste the new key, shown in the Filtreo panel: Settings › \"Home Assistant and HomeKit\".",
+        "data": {
+          "token": "Key"
+        }
+      },
+      "trovato": {
+        "title": "Filtreo found on your network",
+        "description": "Filtreo was found at {host}. Press Submit: a request to allow will appear in Filtreo."
+      }
+    },
+    "error": {
+      "cannot_connect": "Filtreo does not answer at this address and port.",
+      "invalid_auth": "The key is wrong.",
+      "unknown": "Something went wrong."
+    },
+    "abort": {
+      "already_configured": "This Filtreo is already connected.",
+      "reauth_successful": "Key updated.",
+      "cannot_connect": "Filtreo is not responding. Make sure the FiltreoCasa app is running.",
+      "rifiutato": "The connection was refused in Filtreo.",
+      "scaduto": "No answer within 10 minutes. Try again from Settings › Devices & services."
+    },
+    "progress": {
+      "consenso": "Open the Filtreo panel (in the Home Assistant sidebar or in a browser) and press **Allow** on the \"wants to connect to Filtreo\" box. You have 10 minutes."
+    },
+    "flow_title": "{name}"
+  },
+  "services": {
+    "pausa": {
+      "name": "Pause Filtreo",
+      "description": "Pauses the filter for the given number of minutes. It resumes automatically.",
+      "fields": {
+        "minuti": {
+          "name": "Minutes",
+          "description": "Pause duration in minutes (1 to 480)."
+        }
+      }
+    }
+  }
+}
