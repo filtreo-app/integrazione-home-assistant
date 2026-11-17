@@ -13,7 +13,7 @@ async def async_setup_entry(hass: HomeAssistant, entry, async_add_entities: AddC
 
 
 class FiltreoCloudflare(FiltreoEntity, BinarySensorEntity):
-    _attr_name = "Filtreo Cloud"
+    _attr_name = "Cloud"            # 1.1.2: in Home Assistant si legge «Filtreo Cloud»
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
     _attr_icon = "mdi:cloud-check"
 

@@ -33,7 +33,7 @@ class FiltreoModalita(FiltreoEntity, SelectEntity):
     def __init__(self, coordinator, did: str, nome: str) -> None:
         super().__init__(coordinator, f"modo_{did}")
         self._did = did
-        self._attr_name = f"Modalità {nome}"
+        self._attr_name = f"Livello {nome}"   # 1.1.2: stesso nome delle app («Livello»)
 
     def _modalita(self) -> list[dict]:
         return self.coordinator.data.get("modalita") or []
@@ -56,7 +56,7 @@ class FiltreoModalita(FiltreoEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         m = next((m for m in self._modalita() if m["nome"] == option), None)
         if not m:
-            raise HomeAssistantError(f"Modalità sconosciuta: {option}")
+            raise HomeAssistantError(f"Livello sconosciuto: {option}")
         r = await self.coordinator.api.modo(self._did, m["id"])
         if not r.get("ok"):
             raise HomeAssistantError(r.get("testo") or "Impossibile cambiare il livello di protezione.")
